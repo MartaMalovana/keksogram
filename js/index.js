@@ -107,9 +107,6 @@ import closeSuccessMessage from "./closeSuccessMessage.js";
                 try {
                     const result = await fetch(e.target.action, {
                         method: "POST",
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        },
                         body: formData,
                     });
 
