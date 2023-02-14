@@ -1,15 +1,9 @@
-import getServerData from "./getServerData.js";
-
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const commentsButton = document.querySelector('.comments-loader');
 
-const serverData = getServerData();
 
-
-
-export default function showBigPicture (e) {
-
+export default function showBigPicture (e, serverData) {
     if (e.target.nodeName !== 'IMG') return;
 
     bigPicture.classList.remove('hidden');

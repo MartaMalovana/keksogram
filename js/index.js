@@ -11,6 +11,7 @@ import getSlider from "./getSlider.js";
 import controlHash from "./controlHash.js";
 import controlComment from "./controlComment.js";
 import closeSuccessMessage from "./closeSuccessMessage.js";
+import getFilters from "./getFilters.js";
 
 (() => {
 
@@ -20,7 +21,6 @@ import closeSuccessMessage from "./closeSuccessMessage.js";
     const inputUpload = document.getElementById('upload-file');
     const picturesSection = document.querySelector('.pictures');
     const filtersContainer = document.querySelector('.img-filters');
-    const filters = document.querySelector('.img-filters__form');
 
     // Відображає зображення інших користувачів
     const promise = new Promise(async (resolve, reject) => {
@@ -50,7 +50,7 @@ import closeSuccessMessage from "./closeSuccessMessage.js";
 
 
     // Виводить повноекранне зображення при натисненні на мініатюру
-    picturesSection.addEventListener('click', showBigPicture);
+    picturesSection.addEventListener('click', (e) => showBigPicture(e, serverData));
 
     // Вихід із повноекранного зображення
     closeBigPicture();
@@ -114,12 +114,13 @@ import closeSuccessMessage from "./closeSuccessMessage.js";
                     if(!result.ok) return reject(error);
                 } catch (error) {
                     return reject(error);
-                }
+                };
             });
 
             promise
                 .then(() => {
                     settingsToDefault();
+                    inputUpload.value = '';
                 })
                 .then(() => {
                     const cloneSuccess = success.content.cloneNode(true);
@@ -134,67 +135,11 @@ import closeSuccessMessage from "./closeSuccessMessage.js";
                     // Закриття повідомлення про помилку надсилання даних з форми
                     document.addEventListener('click', errorCloseByClick);
                     body.addEventListener('keydown', errorCloseByEsc);
-                    function errorCloseByEsc(e) {
-                        if (e.key === 'Escape' || e.key === 'Esc') {
-                            removeError();
-                        };
-                    };
-                    function errorCloseByClick(e) {
-                        if (e.target.nodeName === 'BUTTON' || e.target.nodeName === 'SECTION') {
-                            removeError();
-                        };
-                    };
-                    function removeError() {
-                        document.querySelector('.error').remove();
-                        document.removeEventListener('click', errorCloseByClick);
-                        body.removeEventListener('keydown', errorCloseByEsc);
-                    };
                 });
         });
     };
 
     // Фільтрування зображень
-    filters.addEventListener('click', (e) => {
-        if (!serverData) return;
-
-        // Випадкові 10 зображень
-        const picturesQuantity = serverData.length;
-        let randomPictures = [];
-        const indexes = myRandomInts(10, picturesQuantity - 1);
-        indexes.map((el) => {
-            randomPictures.push(serverData[el]);
-        });
-
-        function myRandomInts(quantity, max) {
-            const set = new Set();
-            while (set.size < quantity) {
-                set.add(Math.floor(Math.random() * max) + 1)
-            };
-            return [...set];
-        };
-
-        if (e.target.id === 'filter-random') {
-            changePicturesByFilter(randomPictures);
-        };
-
-        // Обговорювані зображення
-        let discussedPictures = [...serverData].sort((a, b) => a.likes - b.likes);
-        if (e.target.id === 'filter-discussed') {
-            changePicturesByFilter(discussedPictures);
-        };
-
-        // За замовчуванням
-        if (e.target.id === 'filter-default') {
-            changePicturesByFilter(serverData);
-        };
-
-        function changePicturesByFilter(data) {
-            const copyTitle = document.querySelector('.pictures__title').cloneNode(true);
-            const copyUploadSection = document.querySelector('.img-upload');
-            picturesSection.innerHTML = '';
-            picturesSection.append(copyTitle, copyUploadSection);
-            showPicturesMainPage(data);
-        };
-    });
+    getFilters(serverData);
 
 })();

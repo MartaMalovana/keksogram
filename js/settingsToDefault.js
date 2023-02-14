@@ -14,10 +14,16 @@ export default function settingsToDefault() {
         document.getElementById('effect-none').checked = true;
     };
     getEffect();
+
     inputHash.value = '';
+    inputHash.style.borderColor = 'grey';
+
     comment.value = '';
+    comment.style.borderColor = 'grey';
+
     imgPreviewBox.style.transform = 'scale(1)';
     scaleInput.value = '100%';
+
     editForm.classList.add('hidden');
     body.classList.remove('modal-open');
 };

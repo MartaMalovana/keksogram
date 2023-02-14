@@ -7,6 +7,12 @@ export default function controlHash () {
         const value = e.target.value.trim().toLowerCase();
         const hashes = value.split(/\s{1,}/);
 
+        if(e.target.value.length === 0) {
+            document.querySelector('.text__hashtags:focus').style.borderColor = 'grey';
+            document.querySelector('.text__hashtags:focus').style.outline = '1px solid grey';
+            return;
+        } 
+
         // Перевірка хештегів на правильність написання
         const symbolsCheck = (() => {
             const result = hashes.map(hash => {
