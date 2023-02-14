@@ -3,7 +3,7 @@ const inputHash = document.querySelector('.text__hashtags');
 
 export default function controlHash () {
     inputHash.addEventListener('input', (e) => {
-        const reg = new RegExp('^#{1}[1-90a-zA-Z]{1,19}$');
+        const reg = new RegExp('^#{1}[1-90a-zA-Zа-яА-ЯьЬіІїЇєЄ]{1,19}$');
         const value = e.target.value.trim().toLowerCase();
         const hashes = value.split(/\s{1,}/);
 
