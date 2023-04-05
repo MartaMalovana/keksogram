@@ -6,7 +6,7 @@ export default function showPicturesMainPage(data) {
     
     data.map(item => {
         const pictureContainer = picture.content.cloneNode(true);
-        pictureContainer.querySelector('img').src = `./photos/${item.photo}.jpg`;
+        pictureContainer.querySelector('img').src = `http://localhost:3000/${item.photo}`;
         pictureContainer.querySelector('img').setAttribute('id', item.id);
         pictureContainer.querySelector('.picture__comments').textContent = `${item.comments.length}`;
         pictureContainer.querySelector('.picture__likes').textContent = `${item.likes}`;

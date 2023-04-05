@@ -5,9 +5,10 @@ const picturesSection = document.querySelector('.pictures');
 
 
 export default function getFilters (serverData) {
-    filters.addEventListener('click', (e) => {
+    filters.addEventListener('click', _.throttle((e) => {
+        console.log(serverData);
         if (!serverData) return;
-
+        
         // Випадкові 10 зображень
         if (e.target.id === 'filter-random') {
             const picturesQuantity = serverData.length;
@@ -50,5 +51,5 @@ export default function getFilters (serverData) {
             document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
             e.target.classList.add('img-filters__button--active');
         };
-    });
+    }, 500));
 }

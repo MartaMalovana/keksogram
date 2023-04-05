@@ -12,7 +12,7 @@ export default function showBigPicture (e, serverData) {
 
     const selectedPhoto = serverData.find(item => item.id === Number(e.target.id));
     // Фото
-    bigPicture.querySelector('img').src = `./photos/${selectedPhoto.photo}.jpg`;
+    bigPicture.querySelector('img').src = `http://localhost:3000/${selectedPhoto.photo}`;
     // Опис фото
     bigPicture.querySelector('.social__caption').textContent = selectedPhoto.description;
     // Кількість лайків
@@ -29,7 +29,7 @@ export default function showBigPicture (e, serverData) {
     selectedPhoto.comments.map(item => {
         const commentItem = document.querySelector('.social__comment').cloneNode(true);
         // Аватар
-        commentItem.querySelector('img').src = `img/avatar-${item.avatar}`;
+        commentItem.querySelector('img').src = `http://localhost:3000/${item.avatar}`;
         // Ім'я користувача, який залишив відгук, у атрибуті alt  
         commentItem.querySelector('img').setAttribute('alt', `Аватар на коментарі користувача ${item.name}`);
         // Текст коментаря

@@ -15,7 +15,7 @@ import getFilters from "./getFilters.js";
 
 (() => {
 
-    const serverData = getServerData();
+    let serverData = [];
 
     const body = document.querySelector('body');
     const inputUpload = document.getElementById('upload-file');
@@ -24,15 +24,20 @@ import getFilters from "./getFilters.js";
 
     // Відображає зображення інших користувачів
     const promise = new Promise(async (resolve, reject) => {
-        return resolve('ok');
-        // return reject('error');
+        const result = await fetch("http://localhost:3000/photos");
+        if(result.ok) return resolve(result.json());
+        return reject(error);
     });
 
     promise
-        .then(() => {
-            showPicturesMainPage(serverData);
+        .then(data => {
+            showPicturesMainPage(data.data.result);
+            serverData = data.data.result;
+            return serverData;
         })
         .then(() => {
+            // Фільтрування зображень
+            getFilters(serverData);
             filtersContainer.classList.remove('img-filters--inactive');
         })
         .catch((error) => {
@@ -100,17 +105,26 @@ import getFilters from "./getFilters.js";
         // Надсилання даних при submit форми
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const formData = new FormData(form);                        
 
             // Створення promise із fetch для надсилання даних із форми на сервер
+    
             const promise = new Promise(async (resolve, reject) => {
                 try {
-                    const result = await fetch(e.target.action, {
+                    console.log(e.target.elements);
+                    let formData = new FormData();                        
+                    formData.append("effect", e.target.elements[name="effect"].value);
+                    formData.append("scale", e.target.elements[name="scale"].value);
+                    formData.append("effect-level", e.target.elements[name="effect-level"].value);
+                    formData.append("hashtags", e.target.elements[name="hashtags"].value);
+                    formData.append("description", e.target.elements[name="description"].value);
+                    formData.append("image", e.target.elements[name="filename"].files[0]);
+        
+                    const result = await fetch("http://localhost:3000/photos/new", {
                         method: "POST",
                         body: formData,
                     });
 
-                    if(result.ok) return resolve(result);
+                    if(result.ok) return resolve(result.json());
                     if(!result.ok) return reject(error);
                 } catch (error) {
                     return reject(error);
@@ -139,7 +153,5 @@ import getFilters from "./getFilters.js";
         });
     };
 
-    // Фільтрування зображень
-    getFilters(serverData);
 
 })();
